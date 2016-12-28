@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+set password [lindex $argv 0]
+set hostname [lindex $argv 1]
+set localhostname [lindex $argv 2]
+set localip [lindex $argv 3]
+set timeout 30
+spawn bash -c "echo $localhostname"
+spawn sudo bash -c "echo '$hostname' > /etc/hostname"
+expect "*password*"
+send "$password\r\n"
+spawn sudo bash -c "hostname $hostname"
+expect "*password*"
+send "$password\r\n"
+spawn sudo bash -c "sed -i 's/$localhostname/$hostname/g' /etc/hosts"
+expect "*password*"
+send "$password\r\n"
+spawn sudo bash -c "sed -i 's/'127.0.1.1'/$localip/g' /etc/hosts"
+expect "*password*"
+send "$password\r\n"
+expect eof

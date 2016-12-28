@@ -1,0 +1,15 @@
+#!/usr/bin/expect 
+set timeout 30
+set user [lindex $argv 0]
+set ipAddress [lindex $argv 1]
+set password [lindex $argv 2]
+spawn bash -c "ssh $user@$ipAddress"
+expect {
+ "(yes/no)?" {send "yes\r"; exp_continue}
+ "password:" {send "$password\r"; exp_continue}
+ "$user*" {
+#	 send "cd ~/\r"
+	 send "/home/hadoop/automatedDeployment/slavemain.sh\r"
+ }
+}
+expect eof

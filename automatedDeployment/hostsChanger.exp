@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+set timeout 30
+set hostsFile [lindex $argv 0]
+set password [lindex $argv 1]
+spawn sudo bash -c "cat $hostsFile >> /etc/hosts"
+expect "*password*"
+send "$password\r"
+expect eof

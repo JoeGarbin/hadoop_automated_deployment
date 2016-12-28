@@ -1,0 +1,13 @@
+#!/usr/bin/expect -f
+set timeout 15
+spawn bash -c "rm ~/.ssh/id_rsa*"
+spawn ssh-keygen -t rsa
+expect {
+	"*(/home/hadoop/.ssh/id_rsa)" {send "\n\r"; exp_continue}
+	#"Overwrite*" {send "y\n\r"; exp_continue}
+	"*(empty for no passphrase)" {send "\n\r"; exp_continue}
+	"*again" {send "\n\r";}
+	eof
+}
+expect eof
+#interact
